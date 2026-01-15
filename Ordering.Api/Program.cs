@@ -14,15 +14,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Configure Database
-var dbPath = Path.Combine(builder.Environment.ContentRootPath, "data", "orders.db");
-var dbDirectory = Path.GetDirectoryName(dbPath);
-if (!Directory.Exists(dbDirectory))
-{
-    Directory.CreateDirectory(dbDirectory!);
-}
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? "Host=localhost;Port=5432;Database=orderingdb;Username=postgres;Password=postgres";
 
 builder.Services.AddDbContext<OrderingDbContext>(options =>
-    options.UseSqlite($"Data Source={dbPath}"));
+    options.UseNpgsql(connectionString));
 
 // Register application services
 builder.Services.AddSingleton<IEventQueue, InMemoryEventQueue>();
