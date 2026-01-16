@@ -51,6 +51,10 @@ docker compose logs -f
 docker compose down
 ```
 
+## Container for local debugging
+docker run --name ordering-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=orderingdb -p 5432:5432 -d postgres:latest
+
+
 ## Testing the API
 
 ### Using curl

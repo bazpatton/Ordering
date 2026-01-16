@@ -19,7 +19,31 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: ordering-postgres-ordering
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=ordering_user
+      - POSTGRES_PASSWORD=ordering_password
+      - POSTGRES_DB=ordering_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ordering_user -d ordering_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
 
 
 

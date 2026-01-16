@@ -36,6 +36,14 @@ builder.Logging.AddDebug();
 
 var app = builder.Build();
 
+ILogger? logger = app.Services.GetService<ILogger<Program>>();
+
+if (logger != null)
+{
+    logger.LogInformation(connectionString);
+}
+
+
 // Ensure database is created
 using (var scope = app.Services.CreateScope())
 {
